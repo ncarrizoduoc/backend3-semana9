@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.duoc.ms_cuentas.messaging.CuentaPublisher;
 import com.duoc.ms_cuentas.model.Cuenta;
 import com.duoc.ms_cuentas.repository.CuentaRepository;
@@ -23,8 +25,8 @@ public class CuentaService {
         return cuentaRepo.findAll();
     }
 
-    public Cuenta findCuenta(Long id, String nombre, String tipo){
-        Optional<Cuenta> cuenta = cuentaRepo.findByCuentaIdAndNombreAndTipo(id, nombre, tipo);
+    public Cuenta findCuenta(Long id){
+        Optional<Cuenta> cuenta = cuentaRepo.findById(id);
         if (cuenta.isEmpty()){
             return null;
         } else {
@@ -36,8 +38,9 @@ public class CuentaService {
         return cuentaRepo.save(cuenta);
     }
 
-    public void deleteCuenta(Long id, String nombre, String tipo){
-        cuentaRepo.deleteByCuentaIdAndNombreAndTipo(id, nombre, tipo);
+    @Transactional
+    public void deleteCuenta(Long id){
+        cuentaRepo.deleteById(id);
     }
 
 }

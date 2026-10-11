@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,7 +25,12 @@ public class Cuenta implements Serializable{
 
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
     @Column(name = "cuenta_id", nullable = false)
+    @Positive(message = "El ID de cuenta debe ser un numero positivo")
+    @NotNull(message = "Debe ingresar un ID de cuenta")
     private Long cuentaId;
 
     @Column(name = "nombre", nullable = false)

@@ -16,10 +16,10 @@ import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController 
 @RequestMapping("/api/banco/cuenta")
@@ -37,14 +37,10 @@ public class CuentaController {
     }
 
 
-    @GetMapping
+    @GetMapping("/{id}")
     @CircuitBreaker(name = "bancoBreaker", fallbackMethod ="findCuentaFallback")
-    public ResponseEntity<?> findCuenta(
-            @RequestParam Long id, 
-            @RequestParam String nombre, 
-            @RequestParam String tipo
-        ) {
-        Cuenta cuenta = cuentaService.findCuenta(id, nombre, tipo);
+    public ResponseEntity<?> findCuenta(@PathVariable Long id) {
+        Cuenta cuenta = cuentaService.findCuenta(id);
         if (cuenta == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -59,43 +55,36 @@ public class CuentaController {
             HttpStatus.SERVICE_UNAVAILABLE.value(),
             "Banco no disponible",
             "No fue posible consultar los datos de la cuenta en este momento",
-            "/api/banco/cuenta"
+            "/api/banco/cuenta/" + id
         );
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(error);
     }
 
     @PostMapping
     public ResponseEntity<?> saveCuenta(@Valid @RequestBody Cuenta cuenta){
-        cuenta.setCuentaId(null);
+        cuenta.setId(null);
         return ResponseEntity.ok(cuentaService.save(cuenta));
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateCuenta(
-        @RequestParam Long id, 
-        @RequestParam String nombre, 
-        @RequestParam String tipo,
+        @PathVariable  Long id, 
         @Valid @RequestBody Cuenta cuenta
     ) {
-        if (cuentaService.findCuenta(id, nombre, tipo) == null) {
+        if (cuentaService.findCuenta(id) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        cuentaService.deleteCuenta(id, nombre, tipo); // Se elimina la cuenta anterior
-        cuenta.setCuentaId(id);
-        return ResponseEntity.ok(cuentaService.save(cuenta)); // Se guarda la cuenta actualizada
+        cuenta.setId(id);
+        return ResponseEntity.ok(cuentaService.save(cuenta));
 
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deleteCuenta(
-        @RequestParam Long id, 
-        @RequestParam String nombre, 
-        @RequestParam String tipo
-    ) {
-        if (cuentaService.findCuenta(id, nombre, tipo) == null) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteCuenta(@PathVariable Long id) {
+        if (cuentaService.findCuenta(id) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        cuentaService.deleteCuenta(id, nombre, tipo);
+        cuentaService.deleteCuenta(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
     }
