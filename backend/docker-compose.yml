@@ -55,7 +55,7 @@ services:
 
 
   ms-banco:
-    build: ./msBanco
+    build: ./ms-banco
     ports:
       - "8090:8090"
     depends_on:
