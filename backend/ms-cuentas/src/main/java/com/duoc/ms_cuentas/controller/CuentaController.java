@@ -27,9 +27,15 @@ public class CuentaController {
 
     private final CuentaService cuentaService;
 
-    public CuentaController(CuentaService bancoService) {
-        this.cuentaService = bancoService;
+    public CuentaController(CuentaService cuentaService) {
+        this.cuentaService = cuentaService;
     }
+
+    @GetMapping
+    public ResponseEntity<?> findAll(){
+        return ResponseEntity.ok(cuentaService.findAll());
+    }
+
 
     @GetMapping
     @CircuitBreaker(name = "bancoBreaker", fallbackMethod ="findCuentaFallback")
