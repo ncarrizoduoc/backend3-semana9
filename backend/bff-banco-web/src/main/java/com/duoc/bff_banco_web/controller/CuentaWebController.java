@@ -74,8 +74,4 @@ public class CuentaWebController {
             ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-
-
-    
-
 }
