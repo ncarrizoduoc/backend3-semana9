@@ -12,6 +12,8 @@ import org.springframework.core.io.Resource;
 import com.duoc.banco.exception.MovimientoCuentaNoValidoException;
 import com.duoc.banco.model.MovimientoCuenta;
 
+import static com.duoc.banco.util.LocalDateParser.toFecha;
+
 @Configuration
 public class MovimientoCuentaItemReaderConfig {
     
@@ -43,6 +45,8 @@ public class MovimientoCuentaItemReaderConfig {
         return fieldSet -> {
             MovimientoCuenta movimientoCuenta = new MovimientoCuenta();
             movimientoCuenta.setCuentaId(fieldSet.readLong("cuentaId"));
+            movimientoCuenta.setFecha(toFecha(fieldSet.readString("fecha")));
+            movimientoCuenta.setTransaccion(fieldSet.readString("transaccion"));
             movimientoCuenta.setMonto(fieldSet.readInt("monto"));
             movimientoCuenta.setDescripcion(fieldSet.readString("descripcion"));
 

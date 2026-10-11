@@ -1,9 +1,5 @@
 package com.duoc.banco.item;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
 import org.springframework.batch.infrastructure.item.file.builder.FlatFileItemReaderBuilder;
@@ -14,16 +10,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import com.duoc.banco.model.Transaccion;
 
+import static com.duoc.banco.util.LocalDateParser.toFecha;
+
 @Configuration
 public class TransaccionItemReaderConfig {
-
-    // Formatos de fecha válidos en el archivo
-    private static final DateTimeFormatter[] FORMATOS = {
-        DateTimeFormatter.ofPattern("yyyy-MM-dd"),
-        DateTimeFormatter.ofPattern("dd-MM-yyyy"),
-        DateTimeFormatter.ofPattern("dd/MM/yyyy"),
-        DateTimeFormatter.ofPattern("yyyy/MM/dd")
-    };
 
     @Bean(name = "transaccionItemReader")
     @StepScope // Crea una instancia del Bean para cada partición
@@ -58,25 +48,5 @@ public class TransaccionItemReaderConfig {
             transaccion.setTipo(fieldSet.readString("tipo"));
             return transaccion;
         };
-    }
-
-    // Convertir String a fecha
-    private LocalDate toFecha(String fechaStr) {
-        // Si la fila del CSV no incluye fecha, retorna null
-        if (fechaStr == null || fechaStr.trim().isEmpty()) {
-            return null;
-        }
-
-        // Se intenta convertir el String a fecha usando todos los formatos validos
-        String fechaLimpia = fechaStr.trim();
-        for (DateTimeFormatter formatter : FORMATOS) {
-            try {
-                return LocalDate.parse(fechaLimpia, formatter);
-            } catch (DateTimeParseException e) {
-                // Ignorar y probar el siguiente formato
-            }
-        }
-        // Si el String no corresponde a un formato valido, lanza una excepción (produce un Skip)
-        throw new DateTimeParseException("No se pudo parsear la fecha: " + fechaStr, fechaStr, 0);
     }
 }
