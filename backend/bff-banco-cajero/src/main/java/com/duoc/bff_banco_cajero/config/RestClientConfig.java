@@ -17,7 +17,7 @@ public class RestClientConfig {
     @Bean("cuentaRestClient")
     public RestClient cuentasRestClient(){
         return RestClient.builder()
-                .baseUrl("http://ms-cuentas:8091")
+                .baseUrl("http://ms-cuentas:8092")
                 .build();
     }
 
