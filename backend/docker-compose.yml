@@ -109,3 +109,14 @@ services:
       config-server:
         condition: service_healthy
     container_name: bff-banco-web
+  
+  bff-banco-movil:
+    build: ./bff-banco-movil
+    ports:
+      - "8082:8082"
+    depends_on:
+      service-discovery:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    container_name: bff-banco-movil
