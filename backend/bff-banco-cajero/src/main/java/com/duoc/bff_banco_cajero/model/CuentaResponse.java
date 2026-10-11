@@ -11,7 +11,6 @@ public class CuentaResponse {
     
     private Long id;
     private Long cuentaId;
-    private String nombre;
     private Integer saldo;
     private String tipo;
 
