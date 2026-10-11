@@ -120,3 +120,14 @@ services:
       config-server:
         condition: service_healthy
     container_name: bff-banco-movil
+
+  bff-banco-cajero:
+    build: ./bff-banco-cajero
+    ports:
+      - "8083:8083"
+    depends_on:
+      service-discovery:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    container_name: bff-banco-cajero
