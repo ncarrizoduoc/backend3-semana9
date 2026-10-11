@@ -27,9 +27,9 @@ Cada aplicación tiene su propio `Dockerfile`, los cuales proveen instrucciones 
 El directorio raíz contiene un archivo `docker-compose.yml`.
 
 # Como utilizar
-En primer lugar, se debe ejecutar el proceso `Batch` para procesar los datos y poblar las tablas en base de datos. Tras descargar el proyecto, debe modifcar los parámetros de conexión a la base de datos para ajustarlos a su base de datos. Luego, puede ejecutar la aplicación usando un IDE (como Visual Studio Code) y ejecutando la clase principal `BancoApplication`.
+En primer lugar, se debe ejecutar la aplicación contenida en la carpeta `batch` para procesar los datos y poblar las tablas en base de datos. Tras descargar el proyecto, debe modifcar los parámetros de conexión a la base de datos para ajustarlos a su base de datos. Luego, puede ejecutar la aplicación usando un IDE (como Visual Studio Code) y ejecutando la clase principal `BancoApplication`.
 
-Dentro de la carpeta backend, se utiliza un archivo `docker-compose.yml` para desplegar las aplicaciones en contenedores Docker (también despliega **ActiveMQ** usando su imagen).
+Dentro de la carpeta `backend`, se utiliza un archivo `docker-compose.yml` para desplegar las aplicaciones en contenedores Docker (también despliega **ActiveMQ** usando su imagen).
 
 Antes de ejecutar `docker-compose.yml` se debe crear un archivo `.env` en la carpeta `./auth_server` que contenga las variables de entorno **GITHUB_CLIENT_ID** y **GITHUB_CLIENT_SECRET**. Estas variables serán usadas por el **Auth Server** para conectarse a la aplicación OAuth en GitHub y solicitar acceso al usuario. Las variables anteriores deben obtenerse desde la aplicación OAuth creada en GitHub.
 
