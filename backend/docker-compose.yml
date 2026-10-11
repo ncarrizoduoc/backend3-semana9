@@ -83,3 +83,18 @@ services:
       activemq:
         condition: service_healthy
     container_name: ms-correo
+
+  ms-cuentas:
+    build: ./ms-cuentas
+    ports:
+      - "8092:8092"
+    depends_on:
+      service-discovery:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+      auth-server:
+        condition: service_healthy
+      activemq:
+        condition: service_healthy
+    container_name: ms-cuentas
