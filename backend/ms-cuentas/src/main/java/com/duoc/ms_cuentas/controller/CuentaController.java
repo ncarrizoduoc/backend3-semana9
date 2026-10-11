@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController 
-@RequestMapping("/api/banco/cuenta")
+@RequestMapping("/api/banco/cuentas")
 public class CuentaController {
 
     private final CuentaService cuentaService;

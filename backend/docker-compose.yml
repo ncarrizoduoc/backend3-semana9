@@ -98,3 +98,14 @@ services:
       activemq:
         condition: service_healthy
     container_name: ms-cuentas
+
+  bff-banco-web:
+    build: ./bff-banco-web
+    ports:
+      - "8081:8081"
+    depends_on:
+      service-discovery:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    container_name: bff-banco-web
