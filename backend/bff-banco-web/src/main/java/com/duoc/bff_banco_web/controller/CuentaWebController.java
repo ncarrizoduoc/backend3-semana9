@@ -57,7 +57,11 @@ public class CuentaWebController {
         @PathVariable Long id, 
         @Valid @RequestBody Cuenta cuenta,
         @RequestHeader(HttpHeaders.AUTHORIZATION) String jwt){
-        return ResponseEntity.ok(cuentaService.updateCuenta(id, cuenta, jwt));
+        
+        Cuenta actualizado = cuentaService.updateCuenta(id, cuenta, jwt);
+        return (actualizado == null) ?
+            ResponseEntity.status(HttpStatus.NOT_FOUND).build() :
+            ResponseEntity.ok(actualizado);
     }
 
     @DeleteMapping("/{id}")

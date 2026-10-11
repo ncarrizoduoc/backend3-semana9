@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.http.HttpHeaders;
 
 import com.duoc.bff_banco_web.model.Cuenta;
@@ -21,18 +22,22 @@ public class CuentasMicroserviceClient {
 
     public List<Cuenta> findAll(String jwt){
         return restClient.get()
-            .uri("/api/banco/cuentas/")
+            .uri("/api/banco/cuentas")
             .header(HttpHeaders.AUTHORIZATION, jwt)
             .retrieve()
             .body(new ParameterizedTypeReference<List<Cuenta>>() {});
     }
 
     public Cuenta findCuenta(Long id, String jwt){
-        return restClient.get()
-            .uri("/api/banco/cuentas/{id}", id)
-            .header(HttpHeaders.AUTHORIZATION, jwt)
-            .retrieve()
-            .body(Cuenta.class);
+        try {
+            return restClient.get()
+                .uri("/api/banco/cuentas/{id}", id)
+                .header(HttpHeaders.AUTHORIZATION, jwt)
+                .retrieve()
+                .body(Cuenta.class);
+        } catch (HttpClientErrorException.NotFound ex) {
+            return null;
+        }
     }
 
     public Cuenta saveCuenta(Cuenta cuenta, String jwt){
@@ -45,22 +50,30 @@ public class CuentasMicroserviceClient {
     }
 
     public Cuenta updateCuenta(Long id, Cuenta cuenta, String jwt){
-        return restClient.put()
-            .uri("/api/banco/cuentas/{id}", id)
-            .body(cuenta)
-            .header(HttpHeaders.AUTHORIZATION, jwt)
-            .retrieve()
-            .body(Cuenta.class);
+        try{
+            return restClient.put()
+                .uri("/api/banco/cuentas/{id}", id)
+                .body(cuenta)
+                .header(HttpHeaders.AUTHORIZATION, jwt)
+                .retrieve()
+                .body(Cuenta.class);
+        } catch (HttpClientErrorException.NotFound ex) {
+            return null;
+        }
     }
 
     public boolean deleteCuenta(Long id, String jwt) {
-        var response = restClient.delete()
-                .uri("/api/banco/cuentas/{id}", id)
-                .header(HttpHeaders.AUTHORIZATION, jwt)
-                .retrieve()
-                .toBodilessEntity();
+        try {
+            var response = restClient.delete()
+                    .uri("/api/banco/cuentas/{id}", id)
+                    .header(HttpHeaders.AUTHORIZATION, jwt)
+                    .retrieve()
+                    .toBodilessEntity();
 
-        return response.getStatusCode().value() == 204;
+            return response.getStatusCode().value() == 204;
+        } catch (HttpClientErrorException.NotFound ex) {
+            return false;
+        }
     }
     
 
