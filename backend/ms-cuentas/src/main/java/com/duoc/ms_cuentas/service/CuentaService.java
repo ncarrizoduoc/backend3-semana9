@@ -1,5 +1,6 @@
 package com.duoc.ms_cuentas.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -18,6 +19,10 @@ public class CuentaService {
         this.movPublisher = movPublisher;
     }
 
+    public List<Cuenta> findAll(){
+        return cuentaRepo.findAll();
+    }
+
     public Cuenta findCuenta(Long id, String nombre, String tipo){
         Optional<Cuenta> cuenta = cuentaRepo.findByCuentaIdAndNombreAndTipo(id, nombre, tipo);
         if (cuenta.isEmpty()){
@@ -25,7 +30,6 @@ public class CuentaService {
         } else {
             return cuenta.get();
         }
-
     }
 
     public Cuenta save(Cuenta cuenta){
