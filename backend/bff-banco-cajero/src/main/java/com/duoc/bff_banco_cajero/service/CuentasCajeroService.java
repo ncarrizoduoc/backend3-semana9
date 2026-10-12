@@ -1,7 +1,5 @@
 package com.duoc.bff_banco_cajero.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.duoc.bff_banco_cajero.client.CuentasMicroserviceClient;
@@ -14,10 +12,6 @@ public class CuentasCajeroService {
 
     public CuentasCajeroService(CuentasMicroserviceClient restClient){
         this.restClient = restClient;
-    }
-
-    public List<Cuenta> findAll(String jwt){
-        return restClient.findAll(jwt);
     }
 
     public Cuenta findCuenta(Long id, String jwt){

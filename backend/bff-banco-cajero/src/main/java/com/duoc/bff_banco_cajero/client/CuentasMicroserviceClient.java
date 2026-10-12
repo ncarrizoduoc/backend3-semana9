@@ -21,14 +21,6 @@ public class CuentasMicroserviceClient {
         this.restClient = restClient;
     }
 
-    public List<Cuenta> findAll(String jwt){
-        return restClient.get()
-            .uri("/api/banco/cuentas")
-            .header(HttpHeaders.AUTHORIZATION, jwt)
-            .retrieve()
-            .body(new ParameterizedTypeReference<List<Cuenta>>() {});
-    }
-
     public Cuenta findCuenta(Long id, String jwt){
         try {
             return restClient.get()

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -56,5 +58,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
         }
         return ex.getMessage();
     }
+
+    @ExceptionHandler(HttpClientErrorException.Unauthorized.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentials(HttpClientErrorException.Unauthorized ex, WebRequest req) {
+    logger.warn("Authentication failed: {}", ex.getMessage());
+    ErrorResponse body = new ErrorResponse(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value(),
+      "Unauthorized", "Invalid token or missing token", req.getDescription(false));
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(body);
+  }
 
 }

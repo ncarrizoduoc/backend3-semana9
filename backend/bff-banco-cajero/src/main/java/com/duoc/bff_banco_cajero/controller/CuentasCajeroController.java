@@ -24,15 +24,6 @@ public class CuentasCajeroController {
         this.cuentasService = cuentasService;
     }
 
-    @GetMapping
-    public ResponseEntity<?> findAll(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwt){
-        return ResponseEntity.ok(
-            cuentasService.findAll(jwt)
-            .stream()
-            .map(CuentaResponse::new)
-            .toList());
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<?> findCuenta(
         @PathVariable Long id,
